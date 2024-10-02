@@ -38,32 +38,37 @@ public class App {
         int minLength = String.valueOf(min).length();
         int maxLength = String.valueOf(max).length();
 
-        for (int i = 0; i < 6; i++) {
-            int levelValue = (int) (max - ((max - min) / 5.0) * i);
+        for (int row = 0; row < 6; row++) {
+            int levelValue = (int) (max - ((max - min) / 5.0) * row);
             //Print left axis
-            if (i == 0)
-                System.out.print(max + "|");
-            else if (i == 5)
-                System.out.print(" ".repeat(maxLength - minLength) + min + "|");
-            else
-                System.out.print(" ".repeat(maxLength) + "|");
-            for (int j = 0; j < 24; j++) {
-                if (prices[j].price() >= levelValue)
-                    System.out.print("  x");
-                else
-                    System.out.print("   ");
+            switch (row) {
+                case 0 -> System.out.print(max + "|");
+                case 5 -> System.out.print(repeatSpace(maxLength - minLength) + min + "|");
+                default -> System.out.print(repeatSpace(maxLength) + "|");
             }
+            printColumns(levelValue);
             System.out.print("\n");
         }
-        //Print bottom axis
         printBottomAxis(maxLength);
+    }
 
+    private void printColumns(int levelValue) {
+        for (int column = 0; column < 24; column++) {
+            if (prices[column].price() >= levelValue)
+                System.out.print("  x");
+            else
+                System.out.print("   ");
+        }
+    }
+
+    private static String repeatSpace(int maxLength) {
+        return " ".repeat(maxLength);
     }
 
     private static void printBottomAxis(int length) {
-        System.out.print(" ".repeat(length) +
+        System.out.print(repeatSpace(length) +
                          "|------------------------------------------------------------------------\n");
-        System.out.print(" ".repeat(length) +
+        System.out.print(repeatSpace(length) +
                          "| 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23\n");
     }
 
