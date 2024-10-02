@@ -1,15 +1,17 @@
 package org.example;
 
-import java.sql.Time;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class App {
+    public static final int WINDOW_SIZE = 4;
     Scanner scanner = new Scanner(System.in);
     TimeAndPrice[] prices = new TimeAndPrice[24];
 
     public static void main(String[] args) {
+        Locale.setDefault(Locale.of("sv","SE"));
         App app = new App();
         app.run();
     }
@@ -62,7 +64,7 @@ public class App {
     private void sort() {
         var temp = Arrays.copyOf(prices, prices.length);
         Arrays.sort(temp, Comparator.comparingInt(TimeAndPrice::price).reversed());
-        for( var tAndP : temp) {
+        for (var tAndP : temp) {
             System.out.print(tAndP.intervall() + " " + tAndP.price() + " öre\n");
         }
     }
@@ -71,16 +73,18 @@ public class App {
         double minAverage = Double.MAX_VALUE;
         TimeAndPrice startTime = prices[0];
 
-        int sum = prices[0].price() + prices[1].price() + prices[2].price() + prices[3].price();
-
-        for (int i = 0; i < prices.length - 4; i++) {
-            if( sum / 4.0 < minAverage) {
-                minAverage = sum / 4.0;
+        double sum = 0;
+        for (int i = 0; i < WINDOW_SIZE; i++) {
+            sum += prices[i].price();
+        }
+        for (int i = 0; i < prices.length - WINDOW_SIZE; i++) {
+            if (sum / WINDOW_SIZE < minAverage) {
+                minAverage = sum / WINDOW_SIZE;
                 startTime = prices[i];
             }
-            sum = sum - prices[i].price() + prices[i+4].price();
+            sum = sum - prices[i].price() + prices[i + WINDOW_SIZE].price();
         }
-        System.out.printf("Påbörja laddning klockan %s\n", startTime.intervall().substring(0,2));
+        System.out.printf("Påbörja laddning klockan %s\n", startTime.intervall().substring(0, 2));
         System.out.printf("Medelpris 4h: %.1f öre/kWh\n", minAverage);
 
     }
@@ -98,4 +102,5 @@ public class App {
     }
 }
 
-record TimeAndPrice(String intervall, int price) {}
+record TimeAndPrice(String intervall, int price) {
+}
