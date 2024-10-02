@@ -60,13 +60,29 @@ public class App {
     }
 
     private void sort() {
-
-
-
-
+        var temp = Arrays.copyOf(prices, prices.length);
+        Arrays.sort(temp, Comparator.comparingInt(TimeAndPrice::price).reversed());
+        for( var tAndP : temp) {
+            System.out.print(tAndP.intervall() + " " + tAndP.price() + " öre\n");
+        }
     }
 
     private void bestChargeTime() {
+        double minAverage = Double.MAX_VALUE;
+        TimeAndPrice startTime = prices[0];
+
+        int sum = prices[0].price() + prices[1].price() + prices[2].price() + prices[3].price();
+
+        for (int i = 0; i < prices.length - 4; i++) {
+            if( sum / 4.0 < minAverage) {
+                minAverage = sum / 4.0;
+                startTime = prices[i];
+            }
+            sum = sum - prices[i].price() + prices[i+4].price();
+        }
+        System.out.printf("Påbörja laddning klockan %s\n", startTime.intervall().substring(0,2));
+        System.out.printf("Medelpris 4h: %.1f öre/kWh\n", minAverage);
+
     }
 
     private void printMenu() {
@@ -80,8 +96,6 @@ public class App {
                 e. Avsluta
                 """);
     }
-
-
 }
 
 record TimeAndPrice(String intervall, int price) {}
