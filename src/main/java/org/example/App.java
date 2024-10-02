@@ -1,12 +1,13 @@
 package org.example;
 
-import java.util.Formattable;
-import java.util.Formatter;
+import java.sql.Time;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.Scanner;
 
 public class App {
     Scanner scanner = new Scanner(System.in);
-    int[] prices = new int[24];
+    TimeAndPrice[] prices = new TimeAndPrice[24];
 
     public static void main(String[] args) {
         App app = new App();
@@ -30,31 +31,27 @@ public class App {
 
     private void input() {
         for (int i = 0; i < 24; i++) {
-            prices[i] = Integer.parseInt(scanner.nextLine());
+            prices[i] = new TimeAndPrice(intervall(i), Integer.parseInt(scanner.nextLine()));
         }
     }
 
     private void minMaxAverage() {
         int sum = 0;
-        int min = Integer.MAX_VALUE;
-        int max = Integer.MIN_VALUE;
-        int minHour = 0;
-        int maxHour = 0;
-        for (int i = 0; i < prices.length; i++) {
-            sum += prices[i];
-            if (prices[i] < min) {
-                min = prices[i];
-                minHour = i;
+        TimeAndPrice min = prices[0];
+        TimeAndPrice max = prices[0];
+        for (TimeAndPrice price : prices) {
+            sum += price.price();
+            if (price.price() < min.price()) {
+                min = price;
             }
-            if (prices[i] > max) {
-                max = prices[i];
-                maxHour = i;
+            if (price.price() > max.price()) {
+                max = price;
             }
         }
         double average = (double) sum / prices.length;
 
-        System.out.printf("Lägsta pris: %s, %d öre/kWh\n", intervall(minHour), min);
-        System.out.printf("Högsta pris: %s, %d öre/kWh\n", intervall(maxHour), max);
+        System.out.printf("Lägsta pris: %s, %d öre/kWh\n", min.intervall(), min.price());
+        System.out.printf("Högsta pris: %s, %d öre/kWh\n", max.intervall(), max.price());
         System.out.printf("Medelpris: %.2f öre/kWh\n", average);
     }
 
@@ -63,6 +60,9 @@ public class App {
     }
 
     private void sort() {
+
+
+
 
     }
 
@@ -84,6 +84,4 @@ public class App {
 
 }
 
-record TimeAndPrice(String intervall, int price) {
-
-}
+record TimeAndPrice(String intervall, int price) {}
