@@ -13,7 +13,7 @@ public class App {
 
     private void run() {
         boolean running = true;
-        while( running ) {
+        while (running) {
             printMenu();
             String choice = scanner.nextLine();
             switch (choice) {
@@ -26,21 +26,52 @@ public class App {
         }
     }
 
-    private void bestChargeTime() {
-    }
-
-    private void sort() {
-        
-    }
-
-    private void minMaxAverage() {
-        
-    }
-
     private void input() {
         for (int i = 0; i < 24; i++) {
             prices[i] = Integer.parseInt(scanner.nextLine());
         }
+    }
+
+    private void minMaxAverage() {
+        int sum = 0;
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+        int minHour = 0;
+        int maxHour = 0;
+        for (int i = 0; i < prices.length; i++) {
+            sum += prices[i];
+            if (prices[i] < min) {
+                min = prices[i];
+                minHour = i;
+            }
+            if (prices[i] > max) {
+                max = prices[i];
+                maxHour = i;
+            }
+        }
+        double average = (double) sum / prices.length;
+
+        System.out.printf("Lägsta pris: %s, %d öre/kWh\n", intervall(minHour), min);
+        System.out.printf("Högsta pris: %s, %d öre/kWh\n", intervall(maxHour), max);
+        System.out.printf("Medelpris: %.2f öre/kWh\n", average);
+
+
+//        Lägsta pris: 02-03, 1 öre/kWh
+//        Högsta pris: 00-01, 100 öre/kWh
+//        Medelpris: 13,38 öre/kWh
+
+
+    }
+
+    private String intervall(int minHour) {
+        return String.format("%02d-%02d", minHour, minHour + 1);
+    }
+
+    private void sort() {
+
+    }
+
+    private void bestChargeTime() {
     }
 
     private void printMenu() {
@@ -57,3 +88,5 @@ public class App {
 
 
 }
+
+record TimeAndPrice(String intervall, int price){}
