@@ -11,7 +11,7 @@ public class App {
     TimeAndPrice[] prices = new TimeAndPrice[24];
 
     public static void main(String[] args) {
-        Locale.setDefault(Locale.of("sv","SE"));
+        Locale.setDefault(Locale.of("sv", "SE"));
         App app = new App();
         app.run();
     }
@@ -26,9 +26,57 @@ public class App {
                 case "2" -> minMaxAverage();
                 case "3" -> sort();
                 case "4" -> bestChargeTime();
+                case "5" -> visualize();
                 case "e", "E" -> running = false;
             }
         }
+    }
+
+    private void visualize() {
+        int min = minPrice();
+        int max = maxPrice();
+        int minLength = String.valueOf(min).length();
+        int maxLength = String.valueOf(max).length();
+
+        for (int i = 0; i < 6; i++) {
+            int levelValue = (int) (max - ((max - min) / 5.0) * i);
+            //Print left axis
+            if (i == 0)
+                System.out.print(max + "|");
+            else if (i == 5)
+                System.out.print(" ".repeat(maxLength - minLength) + min + "|");
+            else
+                System.out.print(" ".repeat(maxLength) + "|");
+            for (int j = 0; j < 24; j++) {
+                if (prices[j].price() >= levelValue)
+                    System.out.print("  x");
+                else
+                    System.out.print("   ");
+            }
+            System.out.print("\n");
+        }
+        //Print bottom axis
+        printBottomAxis(maxLength);
+
+    }
+
+    private static void printBottomAxis(int length) {
+        System.out.print(" ".repeat(length) +
+                         "|------------------------------------------------------------------------\n");
+        System.out.print(" ".repeat(length) +
+                         "| 00 01 02 03 04 05 06 07 08 09 10 11 12 13 14 15 16 17 18 19 20 21 22 23\n");
+    }
+
+    private int maxPrice() {
+        return Arrays.stream(prices)
+                .mapToInt(TimeAndPrice::price)
+                .max().orElse(0);
+    }
+
+    private int minPrice() {
+        return Arrays.stream(prices)
+                .mapToInt(TimeAndPrice::price)
+                .min().orElse(0);
     }
 
     private void input() {
@@ -97,6 +145,7 @@ public class App {
                 2. Min, Max och Medel
                 3. Sortera
                 4. Bästa Laddningstid (4h)
+                5. Visualisering
                 e. Avsluta
                 """);
     }
