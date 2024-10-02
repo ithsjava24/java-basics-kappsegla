@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.Formattable;
+import java.util.Formatter;
 import java.util.Scanner;
 
 public class App {
@@ -54,13 +56,6 @@ public class App {
         System.out.printf("Lägsta pris: %s, %d öre/kWh\n", intervall(minHour), min);
         System.out.printf("Högsta pris: %s, %d öre/kWh\n", intervall(maxHour), max);
         System.out.printf("Medelpris: %.2f öre/kWh\n", average);
-
-
-//        Lägsta pris: 02-03, 1 öre/kWh
-//        Högsta pris: 00-01, 100 öre/kWh
-//        Medelpris: 13,38 öre/kWh
-
-
     }
 
     private String intervall(int minHour) {
@@ -89,4 +84,6 @@ public class App {
 
 }
 
-record TimeAndPrice(String intervall, int price){}
+record TimeAndPrice(String intervall, int price) {
+
+}
